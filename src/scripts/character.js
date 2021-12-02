@@ -1,4 +1,4 @@
-import { isCharacter } from "./utils"
+import { isEmptyTile } from "./utils"
 
 const directions = ['left', 'up', 'right', 'down']
 
@@ -53,10 +53,7 @@ export class Character {
 
     move(cardinal, game) {
         const moveTo = (x, y) => {
-            if ( isCharacter(game.gridAt(x, y)) ) {
-                // fail to move if there's already a character there
-                return
-            }
+            if (!isEmptyTile(this.gridAt(x, y))) return
             game.moveCharacter(this.name, x, y)
         }
         switch(cardinal) {
