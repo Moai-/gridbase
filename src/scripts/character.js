@@ -53,7 +53,7 @@ export class Character {
 
     move(cardinal, game) {
         const moveTo = (x, y) => {
-            if (!isEmptyTile(this.gridAt(x, y))) return
+            if (!isEmptyTile(game.gridAt(x, y))) return
             game.moveCharacter(this.name, x, y)
         }
         switch(cardinal) {
@@ -84,6 +84,36 @@ export class Character {
             default:
             break
         }
+    }
+
+    getLOS(game) {
+        const {x, y, direction} = this
+        const max = game.getGridDimensions()
+        let entities = []
+        switch(direction) {
+            case 'up':
+                for( let curY = y - 1; curY >= 0; curY--) {
+                    entities = [...entities, ...game.getRow(curY)]
+                }
+            break
+            case 'left':
+                for( let curX = x - 1; curX >= 0; curX--) {
+                    entities = [...entities, ...game.getCol(curX)]
+                }
+
+            break
+            case 'right':
+                for( let curX = x + 1; curX < max.x; curX++) {
+                    entities = [...entities, ...game.getCol(curX)]
+                }
+            break
+            default:
+                for( let curY = y + 1; curY < max.y; curY++) {
+                    entities = [...entities, ...game.getRow(curY)]
+                }
+            break
+        }
+        return entities.filter(tile => !isEmptyTile(tile))
     }
 }
 

@@ -16,7 +16,7 @@ export default (g, upKey) => {
     for ( let cellX = 0; cellX < x; cellX++) {
         labels.push(
             <Entity 
-                key={`label-${cellX}-n-${upKey}`} 
+                key={`label-${cellX}-n`} 
                 posX={cellX} 
                 posY={-1}
             >
@@ -27,7 +27,7 @@ export default (g, upKey) => {
     for (let cellY = 0; cellY < y; cellY++){
         labels.push(
             <Entity 
-                key={`label-n-${cellY}-${upKey}`} 
+                key={`label-n-${cellY}`} 
                 posX={-1} 
                 posY={cellY}
             >
