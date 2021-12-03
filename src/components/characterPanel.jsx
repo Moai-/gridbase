@@ -15,8 +15,10 @@ export const CharacterPanel = (props) => {
     const {game, updateKey} = props
     const curChar = game.characters[game.selectedChar] 
 
+
     if (curChar) {
         const mapNames = (char) => char.name
+        const charsInLOS = curChar.getLOS(game).map(mapNames).join(", ");
         const charsAdjacent = curChar.getAdjacentTiles(game).filter(isCharacter).map(mapNames).join(', ')
         const charsInControl = curChar.getControlZoneTiles(game).filter(isCharacter).map(mapNames).join(', ')
         return (
@@ -25,6 +27,8 @@ export const CharacterPanel = (props) => {
                 <p>Character location: <Coordinates>{convertX(curChar.x)}{convertY(curChar.y)}</Coordinates></p>
                 <p>Characters adjacent: {charsAdjacent}</p>
                 <p>Characters in control zone: {charsInControl}</p>
+                <p>Characters in line of sight: {charsInLOS}</p>
+
             </CharacterPanelWrapper>
         )
     }

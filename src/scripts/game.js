@@ -38,7 +38,6 @@ export class Game {
     }
 
     moveCharacter(name, newX, newY) {
-        if (this.gridAt(newX, newY) === -1) return 
         const {x, y} = this.characters[name]
         this.grid[x][y] = null
         this.setGridAt(this.characters[name], newX, newY)
@@ -117,6 +116,18 @@ export class Game {
         const x = this.grid.length
         const y = this.grid[Object.keys(this.grid)[0]].length
         return {x, y}
+    }
+
+    getRow(x) {
+        return this.grid[x]
+    }
+
+    getCol(y) {
+        const row = []
+        for( const col of this.grid) {
+            row.push(col[y])
+        }
+        return row
     }
 
 

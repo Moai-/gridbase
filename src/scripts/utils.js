@@ -13,4 +13,6 @@ export const convertY = numToAlpha
 
 export const isEmptyTile = (tile) => tile === null
 
-export const isCharacter = (tile) => ( tile && tile !== -1 && tile.name )
+export const isInvalidTile = (tile) => tile === -1
+
+export const isCharacter = (tile) => ( !isEmptyTile(tile) && !isInvalidTile(tile) && tile.name )

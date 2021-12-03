@@ -1,4 +1,4 @@
-import { isCharacter } from "./utils"
+import { isCharacter, isEmptyTile } from "./utils"
 
 const directions = ['left', 'up', 'right', 'down']
 
@@ -87,6 +87,36 @@ export class Character {
             default:
             break
         }
+    }
+
+    getLOS(game) {
+        const {x, y, direction} = this
+        const max = game.getGridDimensions()
+        let entities = []
+        switch(direction) {
+            case 'up':
+                for( let curY = y - 1; curY >= 0; curY--) {
+                    entities = [...entities, ...game.getCol(curY)]
+                }
+            break
+            case 'left':
+                for( let curX = x - 1; curX >= 0; curX--) {
+                    entities = [...entities, ...game.getRow(curX)]
+                }
+
+            break
+            case 'right':
+                for( let curX = x + 1; curX < max.x; curX++) {
+                    entities = [...entities, ...game.getRow(curX)]
+                }
+            break
+            default:
+                for( let curY = y + 1; curY < max.y; curY++) {
+                    entities = [...entities, ...game.getCol(curY)]
+                }
+            break
+        }
+        return entities.filter(tile => !isEmptyTile(tile))
     }
 }
 
