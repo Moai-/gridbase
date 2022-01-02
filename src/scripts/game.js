@@ -131,8 +131,16 @@ export class Game {
     return row;
   }
 
-  createCharacter(name, xPos, yPos, color, flaw1, flaw2 = null) {
-    const newChar = new Character(name, xPos, yPos, color, flaw1, flaw2);
+  createCharacter(player, name, xPos, yPos, color, flaw1, flaw2 = null) {
+    const newChar = new Character(
+      player,
+      name,
+      xPos,
+      yPos,
+      color,
+      flaw1,
+      flaw2
+    );
     this.addCharacter(newChar);
   }
 }

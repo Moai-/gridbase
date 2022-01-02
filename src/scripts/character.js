@@ -1,11 +1,11 @@
+import { flawsDict } from "./flaws";
 import { isEmptyTile } from "./utils";
-
-//testing if i'm able to push remotely
 
 const directions = ["left", "up", "right", "down"];
 
 export class Character {
-  constructor(name, x, y, color = "red", flaw1, flaw2) {
+  constructor(player, name, x, y, color = "red", flaw1, flaw2) {
+    this.player = player;
     this.name = name;
     this.x = x;
     this.y = y;
@@ -118,6 +118,15 @@ export class Character {
         break;
     }
     return entities.filter((tile) => !isEmptyTile(tile));
+  }
+
+  displayFlaws(game) {
+    const characterFlaws = [this.flaw1, this.flaw2];
+    for (let flaw of characterFlaws) {
+      if (flaw) {
+        return flawsDict[flaw](this, game);
+      }
+    }
   }
 }
 
