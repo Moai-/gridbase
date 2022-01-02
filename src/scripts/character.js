@@ -5,7 +5,7 @@ import { isEmptyTile } from "./utils";
 const directions = ["left", "up", "right", "down"];
 
 export class Character {
-  constructor(name, x, y, color = "red") {
+  constructor(name, x, y, color = "red", flaw1, flaw2) {
     this.name = name;
     this.x = x;
     this.y = y;
@@ -22,6 +22,8 @@ export class Character {
       movement: 1,
       strength: 1,
     };
+    this.flaw1 = flaw1;
+    this.flaw2 = flaw2;
   }
 
   getAdjacentTiles(game) {
