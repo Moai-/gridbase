@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { RotateCw, RotateCcw } from 'react-feather'
 
 const ControlGrid = styled.div`
     display: grid;
@@ -42,7 +43,7 @@ export const UpperControls = (props) => {
             <EmptyCell />
 
             <ControlCell>
-                <button onClick={turn('left')}>&lt;turn</button>
+                <button onClick={turn('left')}>Turn <RotateCw /></button>
             </ControlCell>
             <ControlCell>
                 <button onClick={move('W')}>W</button>
@@ -52,7 +53,7 @@ export const UpperControls = (props) => {
                 <button onClick={move('E')}>E</button>
             </ControlCell>
             <ControlCell>
-                <button onClick={turn('right')}>turn&gt;</button>
+                <button onClick={turn('right')}>Turn <RotateCcw /></button>
             </ControlCell>
 
             <EmptyCell />
