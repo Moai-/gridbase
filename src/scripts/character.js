@@ -1,11 +1,10 @@
 import { isEmptyTile } from "./utils";
 
-//testing if i'm able to push remotely
-
 const directions = ["left", "up", "right", "down"];
 
 export class Character {
   constructor(name, x, y, color = "red") {
+    this.id = Math.random() * Date.now();
     this.name = name;
     this.x = x;
     this.y = y;
@@ -120,11 +119,15 @@ export class Character {
 }
 
 export const generateCharacters = () => {
-  const John = new Character("John", 3, 1, "cyan");
-  const Kevin = new Character("Kevin", 4, 1, "cornflowerblue");
-  const Marcus = new Character("Marcus", 4, 8, "red");
-  const Nick = new Character("Nick", 3, 8, "maroon");
-  Nick.direction = "up";
-  Marcus.direction = "up";
-  return [John, Kevin, Marcus, Nick];
+  const John = new Character("Ulther S", 3, 1, "cornflowerblue");
+  const Kevin = new Character("Johanna S", 4, 2, "cornflowerblue");
+  const Kevin1 = new Character("Kang S", 5, 3, "cornflowerblue");
+  const Kevin2 = new Character("Ziaeddin S", 6, 4, "cornflowerblue");
+  const Nick1 = new Character("Ulther E", 3, 8, "maroon");
+  const Nick2 = new Character("Kang E", 4, 8, "maroon");
+  const Nick3 = new Character("Ziaeddin E", 5, 8, "maroon");
+  const Nick4 = new Character("Neyahual E", 6, 8, "maroon");
+//   Nick.direction = "up";
+//   Marcus.direction = "up";
+  return [John, Kevin, Kevin1, Kevin2, Nick1, Nick2, Nick3, Nick4];
 };
