@@ -1,6 +1,6 @@
 import { Entity } from '../common/entity'
 import styled from 'styled-components'
-import { convertX, convertY } from '../../scripts/utils'
+import { convertX, convertY } from '../../engine/utils'
 
 const LetterContainer = styled.div`
     position: relative;
@@ -12,7 +12,7 @@ const LetterContainer = styled.div`
 
 export default (g, upKey) => {
     const labels = []
-    const {x, y} = g.getGridDimensions()
+    const {width: x, height: y} = g.grid.getDimensions()
     for ( let cellX = 0; cellX < x; cellX++) {
         labels.push(
             <Entity 

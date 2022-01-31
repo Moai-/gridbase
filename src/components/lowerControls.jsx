@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { generateCharacters } from '../scripts/character'
+import { generateCharacters } from '../engine/character'
 
 const LowerControlsWrapper = styled.div`
     border: 1px solid black;

@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { convertX, convertY, isCharacter } from '../scripts/utils'
+import { convertX, convertY, isCharacter } from '../engine/utils'
 
 const CharacterPanelWrapper = styled.div`
     border: 1px solid black;
