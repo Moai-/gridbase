@@ -4,8 +4,8 @@ import { GridEntity } from './gridEntity'
 import { Grid } from './grid'
 import { Location } from './types'
 import { theme, Theme } from './defaultTheme'
+import React from 'react'
 
-// const squaresToDirectionsMap = ['NW', 'N', 'NE', 'W', 'E', 'SW', 'S', 'SE']
 
 type EntityMap = {
     [key: string]: GridEntity
@@ -17,18 +17,46 @@ type EntityFilter = (entity: GridEntity) => boolean
 
 type EntitySelector = string | EntityFilter
 
+type UIMap = {
+    [key: string]: React.ReactElement
+}
+
 export class Game {
 
     grid: Grid
     entities: EntityMap
     refresh: RefreshBoard
     theme: Theme
+    ui: UIMap
 
     constructor() {
         this.grid = new Grid()
         this.entities = {}
         this.refresh = () => {}
         this.theme = theme
+        this.ui = {}
+    }
+
+    addUI(name: string, element: React.ReactElement) {
+        this.ui[name] = element
+    }
+
+    removeUI(name: string) {
+        if (this.ui[name]) {
+            delete this.ui[name]
+        }
+    }
+
+    getUIRender(){
+        return Object
+            .keys(this.ui)
+            .map((key) => {
+                return (
+                    <div key={key}>
+                        {this.ui[key]}
+                    </div>
+                )
+            })
     }
 
     addTheme(theme: Theme) {
@@ -86,40 +114,9 @@ export class Game {
         if (entity) {
             this.grid.cellAt(entity.loc).removeEntity(entity)
             this.grid.cellAt(targetLoc).addEntity(entity)
-            entity.moveTo(targetLoc)
             this.refresh()
         }
     }
-
-    // addCharacter(character) {
-    //     const {x, y, name} = character
-    //     this.setGridAt(character, x, y)
-    //     this.entities[name] = character
-    //     this.refresh()
-    // }
-
-    // moveCharacter(name, newX, newY) {
-    //     const {x, y} = this.entities[name]
-    //     this.grid[x][y] = null
-    //     this.setGridAt(this.entities[name], newX, newY)
-    //     this.entities[name].x = newX
-    //     this.entities[name].y = newY
-    //     this.refresh()
-    // }
-
-    // turnCharacter(name, direction) {
-    //     this.entities[name].direction = direction
-    //     this.refresh()
-    // }
-
-    // gridAt(x, y) {
-    //     if (this.grid[x]) {
-    //         if (this.grid[x][y] || this.grid[x][y] === null) {
-    //             return this.grid[x][y]
-    //         }
-    //     }
-    //     return -1
-    // }
 
     // toggleSelectChar(name) {
     //     if (this.selectedChar) {
@@ -137,48 +134,5 @@ export class Game {
     //     }
     //     this.refresh()
     // }
-
-    // getCellsAround(name) {
-    //     // the long, obvious way to do this
-    //     // squares are named like this (where c is the tested character)
-    //     // 0, 1, 2
-    //     // 3, c, 4
-    //     // 5, 6, 7
-    //     const {x, y} = this.entities[name]
-    //     const sq0 = this.gridAt(x - 1, y - 1)
-    //     const sq1 = this.gridAt(x, y - 1)
-    //     const sq2 = this.gridAt(x + 1, y - 1)
-    //     const sq3 = this.gridAt(x - 1, y)
-    //     const sq4 = this.gridAt(x + 1, y)
-    //     const sq5 = this.gridAt(x - 1, y + 1)
-    //     const sq6 = this.gridAt(x, y + 1)
-    //     const sq7 = this.gridAt(x + 1, y + 1)
-    //     return [sq0, sq1, sq2, sq3, sq4, sq5, sq6, sq7]
-    // }
-
-    // getCellsAroundDirs(name) {
-    //     const cells = this.getCellsAround(name)
-    //     const dirs = {}
-    //     cells.forEach((cell, idx) => dirs[squaresToDirectionsMap[idx]] = cell)
-    //     return dirs
-    // }
-
-    // getCharactersAround(name) {
-    //     this.getCellsAround(name).filter(isCharacter)
-    // }
-
-    // getCol(x) {
-    //     return this.grid[x]
-    // }
-
-    // getRow(y) {
-    //     const row = []
-    //     for( const col of this.grid) {
-    //         row.push(col[y])
-    //     }
-    //     return row
-    // }
-
-
 }
 

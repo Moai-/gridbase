@@ -1,6 +1,8 @@
 import { GridEntity } from './gridEntity'
 import { Location } from './types'
 
+type EntityFilter = (entity: GridEntity) => boolean
+
 export class GridCell {
     contents: GridEntity[]
     loc: Location
@@ -15,6 +17,10 @@ export class GridCell {
             if (element.id === entity.id) return element
         }
         return null
+    }
+
+    findEntity(filter: EntityFilter) {
+        return this.contents.filter(filter)
     }
 
     removeEntity(entity: GridEntity) {

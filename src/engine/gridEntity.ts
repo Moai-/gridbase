@@ -1,4 +1,5 @@
 import { Location } from './types'
+import { getGame } from '../GameContext'
 
 export const unplacedLocation: Location = {
     x: -1,
@@ -20,6 +21,8 @@ export class GridEntity {
   }
 
   moveTo(loc: Location) {
+      const g = getGame()
       this.loc = loc
+      g.moveEntity(this.id, loc)
   }
 }

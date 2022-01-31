@@ -1,5 +1,7 @@
-import { GridEntity } from './common/gridEntity'
+import { GridEntity } from '../../../engine/defaultTheme'
+import { EntityRenderer } from '../../../engine/theme'
 import { ArrowUp, ArrowDown, ArrowLeft, ArrowRight } from 'react-feather'
+import { Character as CharacterClass } from '../character'
 import styled from 'styled-components'
 
 const DirectionContainer = styled.div`
@@ -12,7 +14,7 @@ const DirectionContainer = styled.div`
     margin-right: auto;
 `
 
-const getDirectionalArrow = (direction) => {
+const getDirectionalArrow = (direction: string) => {
     const props = {color: 'white', size: 24, style: {display: 'block', margin: 'auto'}}
     if (direction === 'up') return <ArrowUp {...props} />
     if (direction === 'left') return <ArrowLeft {...props} />
@@ -20,20 +22,14 @@ const getDirectionalArrow = (direction) => {
     return <ArrowDown {...props} />
 }
 
-export const Character = (props) => {
-    const {char} = props
+export const Character: EntityRenderer = (props) => {
+    const entity = props.entity as CharacterClass
 
     return (
-        <GridEntity 
-            posX={char.x} 
-            posY={char.y}
-            color={char.selected ? 'purple' : char.color}
-            style={{zIndex: 1, color: char.selected ? 'white': 'black'}} 
-            onClick={props.onClick} 
-        >
-            {char.name}
+        <GridEntity entity={entity}>
+            {entity.name}
             <DirectionContainer>
-                {getDirectionalArrow(char.direction)}
+                {getDirectionalArrow(entity.direction)}
             </DirectionContainer>
 
         </GridEntity>

@@ -1,12 +1,9 @@
+import React from 'react'
 import { Grid } from './components/grid'
-// import { UpperControls } from './components/upperControls'
-// import { LowerControls } from './components/lowerControls'
-// import { CharacterPanel } from './components/characterPanel'
-import { Game } from './engine/game'
-// import { Character } from './engine/character'
 import { useState } from 'react'
 import styled from 'styled-components'
 import { adoptRules } from './rules/current'
+import { GameContext } from './GameContext'
 
 const GameAreaWrapper = styled.div`
   display: flex;
@@ -19,21 +16,26 @@ const ControlWrapper = styled.div`
   margin-left: 20px;
 `
 
-// window.Character = Character
+
+const game = adoptRules()
 
 const App = () => {
-
   // Manual refresh for everything in the game. The Game class uses this to
   // signal to the UI that it needs to be updated.
   const [updateKey, setUpdateKey] = useState(`1`)
-  const g = adoptRules()
-  g.setRefresh(() => {
+  game.setRefresh(() => {
     setUpdateKey(`${Math.random() * Date.now()}`)
   })
-
+  
   return (
     <GameAreaWrapper>
-      <Grid game={g} updateKey={updateKey} />
+      <GameContext.Provider value={game}>
+        <Grid updateKey={updateKey} />
+        <ControlWrapper id={updateKey}>
+          {game.getUIRender()}
+        </ControlWrapper>
+      </GameContext.Provider>
+
       {/* <ControlWrapper>
         <UpperControls game={game} updateKey={updateKey} />
         <CharacterPanel game={game} updateKey={updateKey} />

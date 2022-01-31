@@ -1,6 +1,22 @@
-import { Entity } from '../common/entity'
 import styled from 'styled-components'
 import { convertX, convertY } from '../../engine/utils'
+
+const EntitySquare = styled.div`
+    width: 78px;
+    height: 78px;
+    position: absolute;
+`
+const Entity = (props) => {
+    const {posX, posY, color, onClick} = props
+    const left = posX * 80
+    const top = posY * 80
+    const style = props.style || {}
+    return (
+        <EntitySquare style={{left, top, ...style, backgroundColor: color ? color : undefined}} onClick={onClick} >
+            {props.children}
+        </EntitySquare>
+    )
+}
 
 const LetterContainer = styled.div`
     position: relative;
@@ -10,9 +26,10 @@ const LetterContainer = styled.div`
     margin-top: 39%;
 `
 
+
 export default (g, upKey) => {
     const labels = []
-    const {width: x, height: y} = g.grid.getDimensions()
+    const {width: x, height:y} = g.grid.getDimensions()
     for ( let cellX = 0; cellX < x; cellX++) {
         labels.push(
             <Entity 

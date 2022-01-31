@@ -12,7 +12,6 @@ export const GridEntity: EntityRenderer = (props) => {
     const {x, y} = entity.loc
     const left = x * 80
     const top = y * 80
-    // console.log('generate gridEntity at coordinate', left, top)
     return (
         <EntitySquare style={{left, top, ...style}}>
             {children}

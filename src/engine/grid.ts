@@ -42,7 +42,18 @@ export class Grid {
     getDimensions() {
         const width = this.rows.length
         const height = this.rows[parseInt(Object.keys(this.rows)[0], 10)].length
-        return {width, height}
+        return { width, height }
     }
 
+    getCol(x: number) {
+        return this.rows[x]
+    }
+
+    getRow(y: number) {
+        const row = []
+        for( const col of this.rows) {
+            row.push(col[y])
+        }
+        return row
+    }
 }
