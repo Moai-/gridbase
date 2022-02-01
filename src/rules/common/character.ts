@@ -38,6 +38,12 @@ export class Character extends GridEntity {
     this.renderType = 'character'
   }
 
+  addToBoard() {
+    const g = getGame()
+    g.addEntity(this, this.loc)
+    g.refresh()
+  }
+
   getCellsAround() {
       // the long, obvious way to do this
       // squares are named like this (where c is the tested character)

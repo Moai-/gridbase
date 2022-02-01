@@ -2,7 +2,7 @@ import React from 'react'
 import { Grid } from './components/grid'
 import { useState } from 'react'
 import styled from 'styled-components'
-import { adoptRules } from './rules/current'
+import { adoptRules } from './rules/1.2.1'
 import { GameContext } from './GameContext'
 
 const GameAreaWrapper = styled.div`

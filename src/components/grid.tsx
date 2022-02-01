@@ -15,6 +15,7 @@ export const Grid = (props: GridProps) => {
     const game = useContext(GameContext)
     const {updateKey} = props
     if (game) {
+        if (!game.grid.show) return []
         const {width, height} = game.grid.getDimensions()
         const outlineStyle = {
             width: width * 80,

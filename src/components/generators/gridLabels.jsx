@@ -30,6 +30,7 @@ const LetterContainer = styled.div`
 export default (g, upKey) => {
     const labels = []
     const {width: x, height:y} = g.grid.getDimensions()
+    if (!g.grid.show) return []
     for ( let cellX = 0; cellX < x; cellX++) {
         labels.push(
             <Entity 

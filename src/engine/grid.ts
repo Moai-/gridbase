@@ -2,13 +2,16 @@ import { GridCell } from './gridCell'
 import { Location } from './types'
 import { unplacedLocation } from './gridEntity'
 import { GridSquare } from './gridSquare'
+import { getGame } from '../GameContext'
 
 export class Grid {
     rows: Array<Array<GridCell>>
     unplacedEntities: GridCell = new GridCell(unplacedLocation)
+    show: boolean
 
     constructor() {
         this.rows = []
+        this.show = false
     }
 
     generate(widthX: number, heightY: number) {
@@ -32,6 +35,7 @@ export class Grid {
                 return this.rows[loc.x][loc.y]
             }
         }
+        console.log('loc invalid! current rows', this.rows.length)
         throw new Error(`Invalid coordinate: x${loc.x}, y${loc.y}`)
     }
 
@@ -55,5 +59,15 @@ export class Grid {
             row.push(col[y])
         }
         return row
+    }
+
+    showBoard() {
+        this.show = true
+        getGame().refresh()
+    }
+
+    hideBoard() {
+        this.show = false
+        getGame().refresh()
     }
 }

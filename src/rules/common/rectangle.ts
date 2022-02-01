@@ -1,5 +1,6 @@
 import { GridEntity, Location } from '../../engine'
 import { Game } from '../../engine/game'
+import { getGame } from '../../GameContext'
 
 type RectangleProps = {
     border: string
@@ -39,10 +40,21 @@ export class Rectangle extends GridEntity {
         }
     }
 
-    addSelfToGame(g: Game) {
+    addToBoard() {
+        const g = getGame()
         g.addEntity(this)
         for (const piece of this.pieces) {
             g.grid.cellAt(piece.loc).addEntity(piece)
         }
+        g.refresh()
+    }
+
+    removeFromBoard() {
+        const g = getGame()
+        g.removeEntity(this)
+        for (const piece of this.pieces) {
+            g.grid.cellAt(piece.loc).removeEntity(piece)
+        }
+        g.refresh()
     }
 }

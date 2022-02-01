@@ -93,7 +93,7 @@ export class Game {
         this.refresh = cb
     }
 
-    renderGrid(width: number, height: number) {
+    setupGrid(width: number, height: number) {
         this.grid = new Grid()
         this.grid.generate(width, height)
         this.refresh()
@@ -107,6 +107,12 @@ export class Game {
         } else {
             this.grid.cellUnplaced().addEntity(entity)
         }
+    }
+
+    removeEntity(entity: GridEntity) {
+        const { [entity.id]: remove, ...rest } = this.entities
+        this.entities = rest
+        this.grid.cellAt(entity.loc).removeEntity(entity)
     }
 
     moveEntity(selector: EntitySelector, targetLoc: Location) {

@@ -2,6 +2,7 @@ import { Game } from '../../../engine/game'
 import styled from 'styled-components'
 import { useState } from 'react'
 import { getGame } from '../../../GameContext'
+import { GithubPicker } from 'react-color'
 
 export const name = 'playerSelection'
 
@@ -21,6 +22,17 @@ const ControlForm = styled.form`
 
 const ControlSet = styled.form`
     padding-bottom: 5px;   
+`
+
+const Swatch = styled.div`
+    width: 18px;
+    height: 18px;
+    border: 1px solid black;
+    border-radius: 25%;
+    margin-left: 5px;
+    background-color: ${props => props.color};
+    display: inline-block;
+    margin-bottom: -4px;
 `
 
 type Player = {
@@ -56,6 +68,7 @@ const PlayerSelectionModal = (props: {onSubmit: (payload: PlayerSelectionPayload
                 <ControlSet>
                     <label>Player 1 Name: </label>
                     <input value={player1Name} onChange={e => setPlayer1Name(e.target.value)} required />
+                    <Swatch color='#004DCF' />
                 </ControlSet>
                 <ControlSet>
                     <label>Player 2 Name: </label>
