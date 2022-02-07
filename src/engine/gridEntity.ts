@@ -20,9 +20,14 @@ export class GridEntity {
     this.zIndex = 0
   }
 
+  drop() {
+    const g = getGame()
+    g.onDrop(g.grid.cellAt(this.loc))
+  }
+
   moveTo(loc: Location) {
       const g = getGame()
-      this.loc = loc
       g.moveEntity(this.id, loc)
+      this.loc = loc
   }
 }

@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 import styled from 'styled-components'
-import generateGrid from './generators/grid'
-import generateLabels from './generators/gridLabels'
+import { generateGrid } from './generators/grid'
+import { generateGridLabels } from './generators/gridLabels'
 import { GameContext } from '../GameContext'
 
 const GridOutline = styled.div`
@@ -11,7 +11,7 @@ const GridOutline = styled.div`
 type GridProps = {
     updateKey: string
 }
-export const Grid = (props: GridProps) => {
+export const Gameboard = (props: GridProps) => {
     const game = useContext(GameContext)
     const {updateKey} = props
     if (game) {
@@ -25,7 +25,7 @@ export const Grid = (props: GridProps) => {
         return (
             <GridOutline key={updateKey} style={outlineStyle}>
                 {generateGrid(game, updateKey)}
-                {generateLabels(game, updateKey)}
+                {generateGridLabels(game, updateKey)}
             </GridOutline>
         )
     }

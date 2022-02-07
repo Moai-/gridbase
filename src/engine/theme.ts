@@ -1,10 +1,13 @@
 import React from 'react'
+import { ConnectDragSource } from 'react-dnd'
 import { GridEntity } from './gridEntity'
 
-type EntityProps = {
+export type EntityProps = {
     entity: GridEntity
     style?: React.CSSProperties
     children?: React.ReactNode
+    ref?: ConnectDragSource
+    onClick?: () => void
 }
 
 export type EntityRenderer = (props: EntityProps) => React.ReactElement

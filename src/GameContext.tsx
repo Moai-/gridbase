@@ -1,5 +1,5 @@
 import React from 'react'
-import { Game } from './engine/game'
+import { Game, ListenerType, DropListenerRecord as DLR } from './engine/game'
 
 export const GameContext = React.createContext<Game | null>(null)
 
@@ -10,3 +10,7 @@ export const setGame = (game: Game) => {
 }
 
 export const getGame = () => nonReactContext
+
+export { ListenerType }
+
+export type DropListenerRecord = DLR

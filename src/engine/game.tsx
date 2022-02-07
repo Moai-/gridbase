@@ -1,6 +1,6 @@
 // import { isCharacter } from './utils'
 import { GridEntity } from './gridEntity'
-// import { GridCell } from './gridCell'
+import { GridCell } from './gridCell'
 import { Grid } from './grid'
 import { Location } from './types'
 import { theme, Theme } from './defaultTheme'
@@ -21,6 +21,19 @@ type UIMap = {
     [key: string]: React.ReactElement
 }
 
+type DropListener = (cell: GridCell) => void
+
+export type DropListenerRecord = {
+    type: ListenerType,
+    listener: DropListener
+}
+
+export enum ListenerType {
+    CLICK,
+    DRAG
+}
+
+
 export class Game {
 
     grid: Grid
@@ -28,13 +41,37 @@ export class Game {
     refresh: RefreshBoard
     theme: Theme
     ui: UIMap
+    dropListeners: DropListenerRecord[]
+
 
     constructor() {
         this.grid = new Grid()
         this.entities = {}
         this.refresh = () => {}
         this.theme = theme
+        this.dropListeners = []
         this.ui = {}
+    }
+
+    onDrop(cell: GridCell) {
+        for( const listenerRecord of this.dropListeners ) {
+            if (listenerRecord.type === ListenerType.DRAG) {
+                listenerRecord.listener(cell)
+            }
+        }
+    }
+
+    listen(type: ListenerType, fn: DropListener) {
+        const record: DropListenerRecord = {type, listener: fn}
+        this.dropListeners = [...this.dropListeners, record]
+        return record
+    }
+
+    unlisten(rec: DropListenerRecord) {
+        this.dropListeners = [
+            ...this.dropListeners.slice(0, this.dropListeners.indexOf(rec)),
+            ...this.dropListeners.slice(this.dropListeners.indexOf(rec) + 1)
+        ]
     }
 
     addUI(name: string, element: React.ReactElement) {
@@ -91,6 +128,12 @@ export class Game {
 
     setRefresh(cb: RefreshBoard) {
         this.refresh = cb
+    }
+
+    refreshAsync() {
+        setTimeout(() => {
+            this.refresh()
+        })
     }
 
     setupGrid(width: number, height: number) {

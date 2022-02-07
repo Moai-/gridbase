@@ -1,9 +1,10 @@
-import React from 'react'
-import { Grid } from './components/grid'
+import { Gameboard } from './engine/gameboard'
 import { useState } from 'react'
 import styled from 'styled-components'
 import { adoptRules } from './rules/1.2.1'
 import { GameContext } from './GameContext'
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
 
 const GameAreaWrapper = styled.div`
   display: flex;
@@ -28,20 +29,16 @@ const App = () => {
   })
   
   return (
-    <GameAreaWrapper>
-      <GameContext.Provider value={game}>
-        <Grid updateKey={updateKey} />
-        <ControlWrapper id={updateKey}>
-          {game.getUIRender()}
-        </ControlWrapper>
-      </GameContext.Provider>
-
-      {/* <ControlWrapper>
-        <UpperControls game={game} updateKey={updateKey} />
-        <CharacterPanel game={game} updateKey={updateKey} />
-        <LowerControls game={game} />
-      </ControlWrapper> */}
-    </GameAreaWrapper>
+    <DndProvider backend={HTML5Backend}>
+      <GameAreaWrapper>
+        <GameContext.Provider value={game}>
+          <Gameboard updateKey={updateKey} />
+          <ControlWrapper id={updateKey}>
+            {game.getUIRender()}
+          </ControlWrapper>
+        </GameContext.Provider>
+      </GameAreaWrapper>
+    </DndProvider>
   );
 }
 

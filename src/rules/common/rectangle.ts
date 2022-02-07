@@ -1,14 +1,13 @@
 import { GridEntity, Location } from '../../engine'
-import { Game } from '../../engine/game'
 import { getGame } from '../../GameContext'
 
-type RectangleProps = {
+export type RectangleProps = {
     border: string
     transparent: boolean
     color: string
 }
 
-const defaultProps: RectangleProps = {
+export const defaultRectangleProps: RectangleProps = {
     border: '1px solid red',
     transparent: true,
     color: 'red'
@@ -21,10 +20,11 @@ export class RectanglePiece extends GridEntity {
         super(loc, id)
         this.parentId = parentId
         this.renderType = 'rectanglePiece'
-        this.props = props || defaultProps
+        this.props = props || defaultRectangleProps
     }
 }
 
+// Create a rectangle by specifying top left and bottom right limits
 export class Rectangle extends GridEntity {
     pieces: GridEntity[]
     props: RectangleProps
@@ -32,7 +32,7 @@ export class Rectangle extends GridEntity {
         super(locStart, id)
         this.renderType = 'rectangle'
         this.pieces = []
-        this.props = props || defaultProps
+        this.props = props || defaultRectangleProps
         for( let xStart = locStart.x; xStart <= locEnd.x; xStart++ ) {
             for (let yStart = locStart.y; yStart <= locEnd.y; yStart++ ) {
                 this.pieces.push(new RectanglePiece({x: xStart, y: yStart}, this.id, this.props))

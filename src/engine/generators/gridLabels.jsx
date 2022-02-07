@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { convertX, convertY } from '../../engine/utils'
+import { convertX, convertY } from '../utils'
 
 const EntitySquare = styled.div`
     width: 78px;
@@ -26,15 +26,14 @@ const LetterContainer = styled.div`
     margin-top: 39%;
 `
 
-
-export default (g, upKey) => {
+const generateGridLabels = (g, upKey) => {
     const labels = []
     const {width: x, height:y} = g.grid.getDimensions()
     if (!g.grid.show) return []
     for ( let cellX = 0; cellX < x; cellX++) {
         labels.push(
             <Entity 
-                key={`label-${cellX}-n`} 
+                key={`label-${cellX}-n-${upKey}`} 
                 posX={cellX} 
                 posY={-1}
             >
@@ -45,7 +44,7 @@ export default (g, upKey) => {
     for (let cellY = 0; cellY < y; cellY++){
         labels.push(
             <Entity 
-                key={`label-n-${cellY}`} 
+                key={`label-n-${cellY}-${upKey}`} 
                 posX={-1} 
                 posY={cellY}
             >
@@ -55,3 +54,5 @@ export default (g, upKey) => {
     }
     return labels
 }
+
+export { generateGridLabels }

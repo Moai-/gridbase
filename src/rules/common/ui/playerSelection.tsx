@@ -1,62 +1,44 @@
-import { Game } from '../../../engine/game'
 import styled from 'styled-components'
 import { useState } from 'react'
 import { getGame } from '../../../GameContext'
-import { GithubPicker } from 'react-color'
+import { ColorPicker } from './components/colorPicker'
+import { ModalWrapper } from './components/styled'
+import { Player } from '../types'
 
 export const name = 'playerSelection'
-
-const ModalWrapper = styled.div`
-    position: fixed;
-    top: 50px;
-    bottom: 50px;
-    left: 50px;
-    right: 50px;
-    background-color: white;
-    border: 1px solid black;
-`
 
 const ControlForm = styled.form`
     padding: 20px;
 `
 
-const ControlSet = styled.form`
+const ControlSet = styled.div`
     padding-bottom: 5px;   
 `
-
-const Swatch = styled.div`
-    width: 18px;
-    height: 18px;
-    border: 1px solid black;
-    border-radius: 25%;
-    margin-left: 5px;
-    background-color: ${props => props.color};
-    display: inline-block;
-    margin-bottom: -4px;
-`
-
-type Player = {
-    name: string
-}
 
 export type PlayerSelectionPayload = {
     player1: Player,
     player2: Player
 }
 
-const PlayerSelectionModal = (props: {onSubmit: (payload: PlayerSelectionPayload) => void}) => {
+const PlayerSelectionModal = (props: { onSubmit: (payload: PlayerSelectionPayload) => void }) => {
     const [player1Name, setPlayer1Name] = useState('Player 1')
     const [player2Name, setPlayer2Name] = useState('Player 2')
+    const [player1Color, setPlayer1Color] = useState('#004DCF')
+    const [player2Color, setPlayer2Color] = useState('#DB3E00')
     
     const clickSubmit = () => {
         if (player1Name) {
             if( player2Name ) {
                 props.onSubmit({
                     player1: {
-                        name: player1Name
+                        name: player1Name,
+                        color: player1Color,
+                        goesFirst: null,
                     },
                     player2: {
-                        name: player2Name
+                        name: player2Name,
+                        color: player2Color,
+                        goesFirst: null,
                     }
                 })
             }
@@ -68,11 +50,12 @@ const PlayerSelectionModal = (props: {onSubmit: (payload: PlayerSelectionPayload
                 <ControlSet>
                     <label>Player 1 Name: </label>
                     <input value={player1Name} onChange={e => setPlayer1Name(e.target.value)} required />
-                    <Swatch color='#004DCF' />
+                    <ColorPicker onSubmit={setPlayer1Color} value={player1Color} />
                 </ControlSet>
                 <ControlSet>
                     <label>Player 2 Name: </label>
                     <input value={player2Name} onChange={e => setPlayer2Name(e.target.value)} required />
+                    <ColorPicker onSubmit={setPlayer2Color} value={player2Color} />
                 </ControlSet>
                 <button onClick={clickSubmit} type="submit">Submit</button>
             </ControlForm>

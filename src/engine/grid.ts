@@ -4,6 +4,7 @@ import { unplacedLocation } from './gridEntity'
 import { GridSquare } from './gridSquare'
 import { getGame } from '../GameContext'
 
+
 export class Grid {
     rows: Array<Array<GridCell>>
     unplacedEntities: GridCell = new GridCell(unplacedLocation)

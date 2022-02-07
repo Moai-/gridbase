@@ -7,5 +7,7 @@ export const setup = () => {
     g.addTheme(theme)
     g.setupGrid(10, 10)
     setGame(g)
+    console.log('Game object below:')
+    console.log(g)
     return g
 }

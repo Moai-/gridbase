@@ -8,12 +8,12 @@ const EntitySquare = styled.div`
 `
 
 export const GridEntity: EntityRenderer = (props) => {
-    const { entity, style, children } = props
+    const { entity, style, children, ref, onClick } = props
     const {x, y} = entity.loc
     const left = x * 80
     const top = y * 80
     return (
-        <EntitySquare style={{left, top, ...style}}>
+        <EntitySquare onClick={onClick} ref={ref} style={{left, top, ...style}}>
             {children}
         </EntitySquare>
     )

@@ -1,7 +1,8 @@
-import { GridEntity } from '../../engine'
+import { GridEntity, GridCell } from '../../engine'
 import { Location } from '../../engine/types'
-import { GridCell } from '../../engine'
-import { getGame } from '../../GameContext'
+import { getGame, ListenerType, DropListenerRecord } from '../../GameContext'
+import { CellFiller } from './cellFiller'
+import { sameLoc } from './scripts'
 
 const squaresToDirectionsMap = ['NW', 'N', 'NE', 'W', 'E', 'SW', 'S', 'SE']
 
@@ -23,12 +24,27 @@ type Dirs = {
   [key: string]: GridCell
 }
 
+type ZoneId = {
+  type: ZoneType,
+  id: string
+}
+
+enum ZoneType {
+  WALKABLE,
+  OCCUPIED,
+}
+
+const findZone = (zoneType: ZoneType) => (zone: ZoneId) => zone.type === zoneType
+const removeZone = (zoneType: ZoneType) => (zone: ZoneId) => zone.type !== zoneType
+
 export class Character extends GridEntity {
 
   name: string
   color: string
   selected: boolean
   direction: Direction
+  zoneIds: ZoneId[]
+  dropListener: null | DropListenerRecord
 
   constructor(name: string, loc: Location, id?: string) {
     super(loc, id)
@@ -36,6 +52,95 @@ export class Character extends GridEntity {
     this.selected = false
     this.direction = Direction.DOWN
     this.renderType = 'character'
+    this.zoneIds = []
+    this.dropListener = null
+  }
+
+  drawWalkZone(){
+    this.removeWalkZone()
+    const controlTiles = this.getControlZoneTiles()
+
+    const occupiedTiles = controlTiles.filter(tile => tile.findEntity(entity => entity.renderType === 'character').length)
+    if (occupiedTiles.length) {
+      const occupiedProps = {
+        border: `1px solid yellow`,
+        color: 'yellow',
+        transparent: true
+      }
+      const occupiedZone = new CellFiller(occupiedTiles, occupiedProps)
+      this.zoneIds = [...this.zoneIds, {
+        type: ZoneType.OCCUPIED,
+        id: occupiedZone.id
+      }]
+      occupiedZone.addToBoard()
+    }
+    
+    const walkableTiles = controlTiles.filter(tile => tile.findEntity(entity => entity.renderType === 'character').length === 0)
+    if (walkableTiles.length) {
+      const props = {
+        border: `1px solid darkgreen`,
+        color: 'green',
+        transparent: true
+      }
+      const walkZone = new CellFiller(walkableTiles, props)
+      this.zoneIds = [...this.zoneIds, {
+        type: ZoneType.WALKABLE,
+        id: walkZone.id
+      }]
+      walkZone.addToBoard()
+    }
+
+  }
+
+  removeWalkZone(){
+    const g = getGame()
+    const [wz] = this.zoneIds.filter(findZone(ZoneType.WALKABLE))
+    const [oz] = this.zoneIds.filter(findZone(ZoneType.OCCUPIED))
+    if (wz) {
+      const walkZone = (g.getEntityById(wz.id) as CellFiller)
+      walkZone.removeFromBoard()
+      this.zoneIds = this.zoneIds.filter(removeZone(ZoneType.WALKABLE))
+    }
+    if (oz) {
+      const occupiedZone = (g.getEntityById(oz.id) as CellFiller)
+      occupiedZone.removeFromBoard()
+      this.zoneIds = this.zoneIds.filter(removeZone(ZoneType.OCCUPIED))
+    }
+  }
+
+  activate() {
+
+    const g = getGame()
+
+    this.dropListener = g.listen(ListenerType.DRAG, (cell) => {
+      const [oz] = this.zoneIds.filter(findZone(ZoneType.OCCUPIED))
+      if (oz) {
+        const occupiedZone = (g.getEntityById(oz.id) as CellFiller)
+        for( const piece of occupiedZone.pieces ) {
+          if (sameLoc(piece.loc, cell.loc)) {
+            return
+          }
+        }
+      }
+      this.moveTo(cell.loc)
+      this.drawWalkZone()
+    })
+    this.selected = true
+    this.drawWalkZone()
+
+  }
+
+  deactivate() {
+      
+    const g = getGame()
+
+    if (this.dropListener) {
+      g.unlisten(this.dropListener)
+      this.dropListener = null
+    }
+    this.selected = false
+    this.removeWalkZone()
+
   }
 
   addToBoard() {
@@ -86,17 +191,20 @@ export class Character extends GridEntity {
     }
   }
 
+  turnTo(direction: Direction) {
+    this.direction = direction
+    this.drawWalkZone()
+  }
+
   turn(direction: Direction) {
     const curIdx = directionOrder.indexOf(this.direction)
-    const g = getGame()
     let nextIdx = 0
     if (direction === Direction.LEFT) {
       nextIdx = curIdx + 1 === directionOrder.length ? 0 : curIdx + 1
     } else {
       nextIdx = curIdx - 1 < 0 ? directionOrder.length - 1 : curIdx - 1
     }
-    this.direction = directionOrder[nextIdx]
-    g.refresh()
+    this.turnTo(directionOrder[nextIdx])
   }
 
   move(cardinal: string) {
@@ -170,18 +278,4 @@ export class Character extends GridEntity {
     }
     return entities
   }
-}
-
-export const generateCharacters = () => {
-//   const John = new Character("Ulther S", 3, 1, "cornflowerblue")
-//   const Kevin = new Character("Johanna S", 4, 2, "cornflowerblue")
-//   const Kevin1 = new Character("Kang S", 5, 3, "cornflowerblue")
-//   const Kevin2 = new Character("Ziaeddin S", 6, 4, "cornflowerblue")
-//   const Nick1 = new Character("Ulther E", 3, 8, "maroon")
-//   const Nick2 = new Character("Kang E", 4, 8, "maroon")
-//   const Nick3 = new Character("Ziaeddin E", 5, 8, "maroon")
-//   const Nick4 = new Character("Neyahual E", 6, 8, "maroon")
-// //   Nick.direction = "up"
-// //   Marcus.direction = "up"
-//   return [John, Kevin, Kevin1, Kevin2, Nick1, Nick2, Nick3, Nick4]
 }

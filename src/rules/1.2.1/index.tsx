@@ -1,15 +1,10 @@
 
 import { Rectangle } from '../common/rectangle'
 import { getPlayers } from '../common/ui/playerSelection'
+import { getPlayerPrecedence } from '../common/ui/turnOrderCheck'
 import { Character, Direction } from '../common/character'
-import { standardRoll } from '../common/scripts'
+import { standardRoll, sleep } from '../common/scripts'
 import { setup } from './setup'
-
-const sleep = (ms: number) => {
-    return new Promise((resolve) => {
-        setTimeout(resolve, ms)
-    })
-}
 
 const addStartingArea = (color: string, isTop?: boolean) => {
     const props = {
@@ -31,21 +26,26 @@ export const adoptRules = () => {
     setTimeout(async () => {
         const start1 = addStartingArea('red', true)
         const start2 = addStartingArea('blue')
-        console.log(standardRoll()())
+        console.log(standardRoll())
         const players = await getPlayers()
+        const precedentedPlayers = await getPlayerPrecedence(players)
         game.grid.showBoard()
-        console.log(players)
+        console.log(precedentedPlayers)
         const testGuy = new Character('Kang', {x: 4, y: 2})
+        const testGuy2 = new Character('Kangzilla', {x: 7, y: 2})
+
         testGuy.addToBoard()
-        await sleep(1000)
-        testGuy.moveTo({x: 4, y: 3})
-        await sleep(1000)
-        testGuy.turn(Direction.LEFT)
+        // await sleep(1000)
+        // testGuy.moveTo({x: 4, y: 3})
+        // await sleep(1000)
+        // testGuy.turn(Direction.LEFT)
         await sleep(1000)
         start1.removeFromBoard()
         start2.removeFromBoard()
-        await sleep(1000)
-        game.grid.hideBoard()
+        testGuy.activate()
+        testGuy2.addToBoard()
+        // await sleep(1000)
+        // game.grid.hideBoard()
     })
     return game
 }

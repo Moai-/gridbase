@@ -1,3 +1,4 @@
+import { getGame } from '../GameContext'
 import { GridEntity } from './gridEntity'
 import { Location } from './types'
 
@@ -10,6 +11,11 @@ export class GridCell {
     constructor(loc: Location, contents?: GridEntity[]){
         this.loc = loc
         this.contents = contents || []
+    }
+
+    drop() {
+        const g = getGame()
+        g.onDrop(this)
     }
 
     hasEntity(entity: GridEntity) {

@@ -1,6 +1,6 @@
-import { Game } from '../../engine/game'
+import { Game } from '../game'
 
-export default (g: Game, upKey: string) => {
+export const generateGrid = (g: Game, upKey: string) => {
     const grid = []
     if (g.grid.show) {
         for ( const cellX in g.grid.rows ) {
@@ -9,7 +9,7 @@ export default (g: Game, upKey: string) => {
                 for (const entity of cell.contents) {
                     const ReactElement = g.theme.getRender(entity.renderType)
                     grid.push(
-                        <ReactElement entity={entity} key={`${entity.renderType}-${cellX}-${cellY}-${upKey}`} />
+                        <ReactElement entity={entity} key={`${entity.renderType}-${cellX}-${cellY}`} />
                     )
                 }
             }
